@@ -26,7 +26,7 @@
                 "JobContext": {}
             },
             "Network": {
-                "Type": "None"
+                "Type": "Full"
             },
             "PublisherSpec": {
                 "Type": "local"
