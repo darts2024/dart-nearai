@@ -1,7 +1,8 @@
 {
     "machine": {
-        "ram": 100,
-        "cpu": {{ mul (or .cpu "1") 1000 }}
+        "gpu": 0,
+        "ram": 400,
+        "cpu": 400,
     },
     "job": {
         "APIVersion": "V1beta1",
@@ -11,8 +12,7 @@
             },
            "Docker": {
                 "Entrypoint": [
-                    "bash", "-c",
-                    "python3 /app/inference.py"
+                    "bun", "start", "generate"
                 ],
                 "Image": "ghcr.io/darts2024/nearai:{{ or .dockerTag "v0.1.0"}}",
                 "EnvironmentVariables": [
@@ -32,8 +32,8 @@
                 "Type": "local"
             },
             "Resources": {
-                "Memory": "{{(or .ram "1gb")}}",
-                "CPU": "{{ or .cpu "1" }}"
+                "Memory": "{{(or .ram "400")}}",
+                "CPU": "{{ or .cpu "400" }}"
            },
             "Timeout": 1800,
             "Verifier": "Noop",
