@@ -14,7 +14,7 @@
                 "Entrypoint": [
                     "bun", "start", "generate"
                 ],
-                "Image": "ghcr.io/darts2024/nearai:{{ or .dockerTag "v0.1.0"}}",
+                "Image": "ghcr.io/darts2024/nearai:{{ or .dockerTag "v0.1.1"}}",
                 "EnvironmentVariables": [
                     {{if .Prompt}}"{{ subt "PROMPT=%s" .Prompt }}"{{else}}"PROMPT="{{end}},
                     "OUTPUT_DIR=/outputs/",
