@@ -75,4 +75,4 @@ async function main(){
   await generateImage(prompt);
 }
 
-main()
+// main()
