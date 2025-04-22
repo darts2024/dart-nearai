@@ -20,6 +20,8 @@ ENV OUTPUT_DIR="/outputs/"
 ENV PROMPT='minimalistic plolygon geometric car  in brutalism warehouse'
 
 
+RUN mkdir -p /outputs
+
 WORKDIR /app
 
 RUN npm install -g bun # the other bun not visible here
