@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { saveImageToFile } from "./same-image";
+import { saveImageToFile } from "./same-image.ts";
 
 
 const nonce = String(Date.now());
