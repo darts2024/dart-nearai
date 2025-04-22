@@ -1,17 +1,12 @@
 import OpenAI from "openai";
 import { saveImageToFile } from "./same-image.ts";
+import path from "path";
 
 
 const nonce = String(Date.now());
 const recipient = 'unreal.near';
 const callbackUrl = 'https://your.app/auth/callback';
 
-//  const auth = await signNearLoginMessage({
-//     message: 'Login to NEAR AI',
-//     nonce,
-//     recipient,
-//     callbackUrl
-//   });
 
 const auth =  {
         "account_id": "hirocoin.near",
@@ -25,19 +20,20 @@ const auth =  {
   }
 
 
-// console.log('Auth response:', auth);
-
 process.env.OPENAI_BASE_URL = "https://api.near.ai/v1"; // Set the base URL for the OpenAI API
 process.env.OPENAI_API_KEY = `Bearer ${JSON.stringify(auth)}`
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // Ensure your API key is stored in the .env file
-  // apiKey: auth.signature, // Ensure your API key is stored in the .env file
-});
 
+export const initializeOpenAI = (auth: any) => {
+  process.env.OPENAI_BASE_URL = "https://api.near.ai/v1";
+  process.env.OPENAI_API_KEY = `Bearer ${JSON.stringify(auth)}`;
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+};
 
-
-async function generateImage(prompt: string): Promise<String | void> {
+export async function generateImage(prompt: string, openaiInstance?: OpenAI): Promise<String | void> {
+  const openai = openaiInstance || initializeOpenAI(auth);
   try {
     const response = await openai.images.generate({
       prompt: prompt,    // The text prompt for image generation
@@ -45,10 +41,20 @@ async function generateImage(prompt: string): Promise<String | void> {
       // size: "1024x1024", // Image resolution (can be 256x256, 512x512, or 1024x1024)
     });
 
-    // console.log(response)
-
     if (response.data && response.data[0] && response.data[0].b64_json) {
-      const filePath = await saveImageToFile(response.data[0].b64_json, prompt);
+      let outputDir = process.env.OUTPUT_DIR ?? ""
+
+      // Create a safe filename from the prompt
+      const safePrompt = prompt
+        .replace(/[^a-zA-Z0-9]/g, '_') // Replace non-alphanumeric chars with underscore
+        .substring(0, 100); // Limit length to avoid extremely long filenames
+      
+      const filename = `${safePrompt}.png`;
+
+      const filePath = path.join(outputDir, filename);
+      
+      await saveImageToFile(response.data[0].b64_json, filePath);
+      
       console.log(`Image successfully saved to: ${filePath}`);
       return filePath;
     } else {
@@ -61,7 +67,12 @@ async function generateImage(prompt: string): Promise<String | void> {
 }
 
 // Example usage
-const prompt = "A futuristic cityscape with flying cars and neon lights";
 
-console.log("Prompt : "+prompt)
-await generateImage(prompt);
+async function main(){
+  const prompt = "A futuristic cityscape with flying cars and neon lights";
+  
+  console.log("Prompt : "+prompt)
+  await generateImage(prompt);
+}
+
+main()
