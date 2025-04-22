@@ -1,8 +1,8 @@
 {
     "machine": {
         "gpu": 0,
-        "ram": 400,
-        "cpu": 400,
+        "ram": {{ mul (regex "\\d+" (or .ram "1gb")) 1000 }},
+        "cpu": {{ mul (or .cpu "1") 1000 }}
     },
     "job": {
         "APIVersion": "V1beta1",
@@ -32,8 +32,8 @@
                 "Type": "local"
             },
             "Resources": {
-                "Memory": "{{(or .ram "400")}}",
-                "CPU": "{{ or .cpu "400" }}"
+                "Memory": "{{(or .ram "1gb")}}",
+                "CPU": "{{ or .cpu "1" }}"
            },
             "Timeout": 1800,
             "Verifier": "Noop",
