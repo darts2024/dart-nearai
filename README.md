@@ -1,7 +1,7 @@
 
 ## Support
 
-# ISDXL : sdxl in intel
+# nearai : sdxl in intel
 
 - cpu
 - xpu (intel)
@@ -12,7 +12,7 @@
 
 ---
 ```
-darts run github.com/darts2024/dart-isdxl:v1.6.0 -i Prompt="cat sit on a trampoline" -i Device="xpu
+darts run github.com/darts2024/dart-nearai:v1.6.0 -i Prompt="cat sit on a trampoline" -i Device="xpu
 "
 ```
 ---
@@ -30,12 +30,12 @@ docker run -it --rm \
  --device /dev/dri \
  --privileged \
  --network=host \
- "laciferin/isdxl:v0.0.8"
+ "laciferin/nearai:v0.0.8"
 
 docker run -it --rm \
  -v "$PWD"/data:/outputs \
  --privileged \
- "laciferin/isdxl:v0.0.8"
+ "laciferin/nearai:v0.0.8"
 
 ```
 ---

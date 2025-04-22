@@ -29,4 +29,4 @@ docker *ARGS:
   docker run -it --privileged {{ARGS}}
 
 ghcr VERSION="v1.6.0":
-  just docker ghcr.io/darts2024/isdxl:{{VERSION}}
+  just docker ghcr.io/darts2024/nearai:{{VERSION}}
