@@ -2,7 +2,7 @@
     "machine": {
         "gpu": 0,
         "ram": {{ mul (regex "\\d+" (or .ram "1gb")) 1000 }},
-        "cpu": {{ mul (or .cpu "1") 1000 }}
+        "cpu": 500
     },
     "job": {
         "APIVersion": "V1beta1",
@@ -14,7 +14,7 @@
                 "Entrypoint": [
                     "bun", "start", "generate"
                 ],
-                "Image": "ghcr.io/darts2024/nearai:{{ or .dockerTag "v0.1.1"}}",
+                "Image": "ghcr.io/darts2024/nearai:{{ or .dockerTag "v0.1.3"}}",
                 "EnvironmentVariables": [
                     {{if .Prompt}}"{{ subt "PROMPT=%s" .Prompt }}"{{else}}"PROMPT=A whimsical forest creature with oversized ears and a mischievous grin, surrounded by glowing fireflies"{{end}},
                     "OUTPUT_DIR=/outputs/",
@@ -33,7 +33,7 @@
             },
             "Resources": {
                 "Memory": "{{(or .ram "1gb")}}",
-                "CPU": "{{ or .cpu "1" }}"
+                "CPU": "{{ or .cpu "500m" }}"
            },
             "Timeout": 1800,
             "Verifier": "Noop",
