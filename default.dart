@@ -16,7 +16,7 @@
                 ],
                 "Image": "ghcr.io/darts2024/nearai:{{ or .dockerTag "v0.1.1"}}",
                 "EnvironmentVariables": [
-                    {{if .Prompt}}"{{ subt "PROMPT=%s" .Prompt }}"{{else}}"PROMPT="{{end}},
+                    {{if .Prompt}}"{{ subt "PROMPT=%s" .Prompt }}"{{else}}"PROMPT=A whimsical forest creature with oversized ears and a mischievous grin, surrounded by glowing fireflies"{{end}},
                     "OUTPUT_DIR=/outputs/",
                     "HF_HUB_OFFLINE=1"
                 ]

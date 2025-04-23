@@ -17,7 +17,7 @@ FROM node:23-alpine
 
 ENV NODE_ENV="production"
 ENV OUTPUT_DIR="/outputs/"
-ENV PROMPT='minimalistic plolygon geometric car  in brutalism warehouse'
+ENV PROMPT='minimalistic plolygon geometric car in brutalism warehouse'
 
 
 RUN mkdir -p /outputs

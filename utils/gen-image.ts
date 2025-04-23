@@ -3,10 +3,6 @@ import { saveImageToFile } from "./same-image.ts";
 import path from "path";
 
 
-const nonce = String(Date.now());
-const recipient = 'unreal.near';
-const callbackUrl = 'https://your.app/auth/callback';
-
 
 const auth =  {
         "account_id": "hirocoin.near",

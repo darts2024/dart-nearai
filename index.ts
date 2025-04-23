@@ -1,9 +1,9 @@
 import { Command } from 'commander';
-import { generateImage } from './utils/gen-image';
+import { generateImage } from '@utils/gen-image.ts';
 
 const program = new Command();
 
-const IMAGE_PROMPT = process.env.PROMPT ?? 'A pair of clear hands looking through a transparent glass Christmas ball , hyper-realistic, minimalist, futuristic background with cute Christmas decorations like Santa Claus, a snowman, and snowflakes, 8k'
+const IMAGE_PROMPT = process.env.PROMPT ?? 'A pair of clear hands looking through a transparent glass Christmas ball,hyper-realistic, minimalist, futuristic background with cute Christmas decorations like Santa Claus, a snowman, and snowflakes, 8k'
 
 program
   .name('nearai')
