@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/bluebird": "^3.5.42",
     "@types/bun": "latest",
     "@types/node": "^20",
     "bs58": "^6.0.0",
