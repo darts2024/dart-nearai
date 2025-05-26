@@ -2,6 +2,7 @@ import { saveImageToFile } from "./same-image.ts";
 import path from "path";
 import { open } from "fs";
 import { openai } from "@config/openai.ts";
+import { env } from "./env.ts";
 
 
 export const handleImageResponse = async (response: any, prompt: string) => {
@@ -33,7 +34,7 @@ export const handleImageResponse = async (response: any, prompt: string) => {
   }
 };
 
-export async function generateImage(prompt: string,N:number): Promise<String | void> {
+export async function generateImage(prompt: string,N:number,seed:number): Promise<String | void> {
   try {
     
     const response = await openai.images.generate({
@@ -43,10 +44,7 @@ export async function generateImage(prompt: string,N:number): Promise<String | v
       // model: "fireworks::accounts/yi-01-ai/models/yi-large"
 
       // model: "fireworks::accounts/fireworks/models/playground-v2-5-1024px-aesthetic"
-      // n: N,
-      // seed: 400000,
-      // model: "stable-diffusion-3",
-      // n: 1,              // Number of images to generate
+      n: N,
       // size: "1024x1024", // Image resolution (can be 256x256, 512x512, or 1024x1024)
     });
 

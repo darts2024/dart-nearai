@@ -18,6 +18,7 @@ FROM node:23-alpine
 ENV NODE_ENV="production"
 ENV OUTPUT_DIR="/outputs/"
 ENV PROMPT='minimalistic polygon geometric car in brutalism warehouse'
+ENV RANDOM_SEED=40
 
 
 RUN mkdir -p /outputs

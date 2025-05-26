@@ -23,10 +23,11 @@ program
   .option('-p, --prompt <string>', 'Prompt to generate image', IMAGE_PROMPT )
   .option('-s, --size <size>', 'Image size (256x256, 512x512, or 1024x1024)', '1024x1024')
   .option('-n, --number <number>', 'Number of images to generate',  env("NUM_IMAGES",'1'))
-  .action(async ({prompt, number}) => {
+  .option('-seed, --seed <number>', 'Random Seed',  env("RANDOM_SEED",'1'))
+  .action(async ({prompt, number,seed}) => {
     try {
-      console.log('🎨 Generating image with prompt:', prompt);
-      const filePath = await generateImage(prompt,number);
+      console.log(`🎨 Generating ${number} image with prompt:`, prompt);
+      const filePath = await generateImage(prompt,number,seed);
       if (filePath) {
         console.log('✨ Image generated successfully at:', filePath);
       }
