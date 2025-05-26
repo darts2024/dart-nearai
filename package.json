@@ -11,6 +11,7 @@
     "@types/bun": "latest",
     "@types/node": "^20",
     "bs58": "^6.0.0",
+    "dotenv": "^16.5.0",
     "eslint": "^9",
     "js-sha256": "^0.11.0",
     "near-api-js": "^5.1.1",

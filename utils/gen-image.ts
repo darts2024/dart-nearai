@@ -28,14 +28,19 @@ export const initializeOpenAI = (auth: any) => {
   });
 };
 
-export async function generateImage(prompt: string, openaiInstance?: OpenAI): Promise<String | void> {
+export async function generateImage(prompt: string,N:number, openaiInstance?: OpenAI): Promise<String | void> {
   const openai = openaiInstance || initializeOpenAI(auth);
   try {
     const response = await openai.images.generate({
       prompt: prompt,    // The text prompt for image generation
+      n:N,
+      seed: 400000,
+      // model: "stable-diffusion-3",
       // n: 1,              // Number of images to generate
       // size: "1024x1024", // Image resolution (can be 256x256, 512x512, or 1024x1024)
     });
+
+    console.log(response);
 
     if (response.data && response.data[0] && response.data[0].b64_json) {
       let outputDir = process.env.OUTPUT_DIR ?? ""
