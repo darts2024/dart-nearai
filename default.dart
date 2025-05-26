@@ -12,9 +12,9 @@
             },
            "Docker": {
                 "Entrypoint": [
-                    "bun", "start", (or .Cmd "generate")
+                    "bun", "start", "{{(or .Cmd "generate")}}"
                 ],
-                "Image": "ghcr.io/darts2024/nearai:{{ or .dockerTag "v0.1.1"}}",
+                "Image": "ghcr.io/darts2024/nearai:{{ or .dockerTag "v0.2.0"}}",
                 "EnvironmentVariables": [
                     {{if .Prompt}}"{{ subt "PROMPT=%s" .Prompt }}"{{else}}"PROMPT=A whimsical forest creature with oversized ears and a mischievous grin, surrounded by glowing fireflies"{{end}},
                     "OUTPUT_DIR=/outputs/",

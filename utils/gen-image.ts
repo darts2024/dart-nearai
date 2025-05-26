@@ -4,13 +4,46 @@ import { open } from "fs";
 import { openai } from "@config/openai.ts";
 
 
+export const handleImageResponse = async (response: any, prompt: string) => {
+  const outputDir = process.env.OUTPUT_DIR ?? "";
+  
+  if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+    const safePromptBase = prompt
+      .replace(/[^a-zA-Z0-9]/g, '-')
+      .substring(0, 80); // Keep room for index to avoid long filenames
+
+    const savedPaths: string[] = [];
+
+    for (let i = 0; i < response.data.length; i++) {
+      const image = response.data[i];
+      
+      if (!image?.b64_json) continue;
+
+      const filename = `${safePromptBase}_${i + 1}.png`;
+      const filePath = path.join(outputDir, filename);
+      
+      await saveImageToFile(image.b64_json, filePath);
+      console.log(`Image ${i + 1} saved to: ${filePath}`);
+      savedPaths.push(filePath);
+    }
+
+    return savedPaths;
+  } else {
+    throw new Error('No image data found in the API response');
+  }
+};
 
 export async function generateImage(prompt: string,N:number): Promise<String | void> {
   try {
     
     const response = await openai.images.generate({
-      prompt: prompt,    // The text prompt for image generation
-      n: N,
+      prompt,    // The text prompt for image generation
+      // model: "playground-v2-1024px-aesthetic",
+      model: "fireworks::accounts/fireworks/models/playground-v2-5-1024px-aesthetic",
+      // model: "fireworks::accounts/yi-01-ai/models/yi-large"
+
+      // model: "fireworks::accounts/fireworks/models/playground-v2-5-1024px-aesthetic"
+      // n: N,
       // seed: 400000,
       // model: "stable-diffusion-3",
       // n: 1,              // Number of images to generate
@@ -19,25 +52,9 @@ export async function generateImage(prompt: string,N:number): Promise<String | v
 
     console.log(response);
 
-    if (response.data && response.data[0] && response.data[0].b64_json) {
-      let outputDir = process.env.OUTPUT_DIR ?? ""
+    await handleImageResponse(response, prompt)
 
-      // Create a safe filename from the prompt
-      const safePrompt = prompt
-        .replace(/[^a-zA-Z0-9]/g, '_') // Replace non-alphanumeric chars with underscore
-        .substring(0, 100); // Limit length to avoid extremely long filenames
-      
-      const filename = `${safePrompt}.png`;
-
-      const filePath = path.join(outputDir, filename);
-      
-      await saveImageToFile(response.data[0].b64_json, filePath);
-      
-      console.log(`Image successfully saved to: ${filePath}`);
-      return filePath;
-    } else {
-      throw new Error('No image data found in the API response');
-    }
+    
     // console.log("Generated Image URL:", response.data[0].url);
   } catch (error) {
     console.error("Error generating image:", error);
