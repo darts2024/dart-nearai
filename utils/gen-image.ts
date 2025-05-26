@@ -91,6 +91,26 @@ export async function generateImage(
   }
 }
 
+export async function editImage(
+  imagePath: string,
+  prompt: string
+): Promise<void> {
+  console.log(`Editing image=${imagePath} with prompt=${prompt}`)
+
+  try {
+    const response = await openai.images.edit({
+      image: imagePath,
+      prompt,
+      model:
+        "fireworks::accounts/fireworks/models/playground-v2-5-1024px-aesthetic",
+    })
+
+    await handleImageResponse(response, prompt, 0)
+  } catch (error) {
+    console.error("Error editing image:", error)
+  }
+}
+
 // Example usage
 
 async function main() {
@@ -98,6 +118,11 @@ async function main() {
 
   console.log("Prompt : " + prompt)
   // await generateImage(prompt,1);
+
+  await editImage(
+    path.join("A_futuristic_cityscape_with_flying_cars_and_neon_lights.png"),
+    "Cars should be rolls royce"
+  )
 }
 
-// main()
+main()
