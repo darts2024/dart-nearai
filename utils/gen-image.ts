@@ -3,9 +3,10 @@ import path from "path";
 import { open } from "fs";
 import { openai } from "@config/openai.ts";
 import { env } from "./env.ts";
+import Bluebird from "bluebird"
 
 
-export const handleImageResponse = async (response: any, prompt: string) => {
+export const handleImageResponse = async (response: any, prompt: string,seed:number) => {
   const outputDir = process.env.OUTPUT_DIR ?? "";
   
   if (response.data && Array.isArray(response.data) && response.data.length > 0) {
@@ -20,11 +21,11 @@ export const handleImageResponse = async (response: any, prompt: string) => {
       
       if (!image?.b64_json) continue;
 
-      const filename = `${safePromptBase}_${i + 1}.png`;
+      const filename = `${safePromptBase}_${i + 1}_${seed}.png`;
       const filePath = path.join(outputDir, filename);
       
       await saveImageToFile(image.b64_json, filePath);
-      console.log(`Image ${i + 1} saved to: ${filePath}`);
+      console.log(`Image seed=${seed} i=${i + 1} saved to: ${filePath}`);
       savedPaths.push(filePath);
     }
 
@@ -34,7 +35,30 @@ export const handleImageResponse = async (response: any, prompt: string) => {
   }
 };
 
-export async function generateImage(prompt: string,N:number,seed:number): Promise<String | void> {
+export async function generateImage(prompt: string,N:number,seed:number): Promise<void> {
+  if (N>1){
+    let promises:Array<Promise<void>> = []
+
+    for (let i = 0; i < N; i++) {
+      promises.push(generateImage(prompt,1,seed+i));
+    }
+
+    await Bluebird.map(
+      promises,
+      async (p) => {
+        // console.log(p)
+        await p
+      },
+      {
+        concurrency: promises.length,
+      }
+    )
+
+    return
+  }
+
+  console.log(`prompt=${prompt}; N=${N}; seed=${seed}`)
+
   try {
     
     const response = await openai.images.generate({
@@ -44,13 +68,13 @@ export async function generateImage(prompt: string,N:number,seed:number): Promis
       // model: "fireworks::accounts/yi-01-ai/models/yi-large"
 
       // model: "fireworks::accounts/fireworks/models/playground-v2-5-1024px-aesthetic"
-      n: N,
+      // n: N, //Doesn't work
       // size: "1024x1024", // Image resolution (can be 256x256, 512x512, or 1024x1024)
     });
 
     console.log(response);
 
-    await handleImageResponse(response, prompt)
+    await handleImageResponse(response, prompt,seed)
 
     
     // console.log("Generated Image URL:", response.data[0].url);
@@ -67,8 +91,6 @@ async function main(){
   
   console.log("Prompt : "+prompt)
   // await generateImage(prompt,1);
-
-
 
 }
 

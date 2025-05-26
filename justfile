@@ -30,3 +30,7 @@ docker *ARGS:
 
 ghcr VERSION="v1.6.0":
   just docker ghcr.io/darts2024/nearai:{{VERSION}}
+
+
+gen prompt number:
+  time bun start generate -n {{number}} -p {{prompt}};
