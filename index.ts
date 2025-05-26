@@ -8,6 +8,7 @@ const IMAGE_PROMPT =env("PROMPT",'A pair of clear hands looking through a transp
 
 import {config} from "dotenv"
 import { env } from '@utils/env.ts';
+import { genJoke } from '@utils/gen-text.ts';
 
 config()
 
@@ -30,6 +31,24 @@ program
         console.log('✨ Image generated successfully at:', filePath);
       }
     } catch (error) {
+      console.error('❌ Error:', error.message);
+    }
+  });
+
+
+const DEFAULT_PROMPT = "Tell me a funny programmer joke.";
+
+program
+  .command('joke')
+  .description('Generate a joke using a witty AI model')
+  .option('-p, --prompt <string>', 'Prompt to generate a joke', DEFAULT_PROMPT)
+  .option('-m, --model <string>', 'Model ID to use', 'fireworks::accounts/fireworks/models/mixtral-8x22b-instruct')
+  .action(async ({ prompt, model }) => {
+    try {
+      console.log('🃏 Generating joke with prompt:', prompt);
+      const joke = await genJoke(prompt, model);
+      console.log('😂 Joke:', joke);
+    } catch (error: any) {
       console.error('❌ Error:', error.message);
     }
   });

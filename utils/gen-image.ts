@@ -1,40 +1,17 @@
-import OpenAI from "openai";
 import { saveImageToFile } from "./same-image.ts";
 import path from "path";
+import { open } from "fs";
+import { openai } from "@config/openai.ts";
 
 
 
-const auth =  {
-        "account_id": "hirocoin.near",
-        "signature": "syCVwqm03oTk5CTHc/btmNX4Rtb59VTV8r3pmSniSFyY98t0oqLY7FLC8QWlPPzv4pbm7crdxc49MwHH2bNMBA==",
-        "public_key": "ed25519:GSawU7vtBcUCq3m9VyETsp9xzUz1L5XBf9H4JkdngfyX",
-        "callback_url": "http://localhost:63580/capture",
-        "nonce": "1744849079161",
-        "recipient": "ai.near",
-        "message": "Welcome to NEAR AI",
-        "on_behalf_of": null
-  }
-
-
-process.env.OPENAI_BASE_URL = "https://api.near.ai/v1"; // Set the base URL for the OpenAI API
-process.env.OPENAI_API_KEY = `Bearer ${JSON.stringify(auth)}`
-
-
-export const initializeOpenAI = (auth: any) => {
-  process.env.OPENAI_BASE_URL = "https://api.near.ai/v1";
-  process.env.OPENAI_API_KEY = `Bearer ${JSON.stringify(auth)}`;
-  return new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-};
-
-export async function generateImage(prompt: string,N:number, openaiInstance?: OpenAI): Promise<String | void> {
-  const openai = openaiInstance || initializeOpenAI(auth);
+export async function generateImage(prompt: string,N:number): Promise<String | void> {
   try {
+    
     const response = await openai.images.generate({
       prompt: prompt,    // The text prompt for image generation
-      n:N,
-      seed: 400000,
+      n: N,
+      // seed: 400000,
       // model: "stable-diffusion-3",
       // n: 1,              // Number of images to generate
       // size: "1024x1024", // Image resolution (can be 256x256, 512x512, or 1024x1024)
@@ -69,11 +46,15 @@ export async function generateImage(prompt: string,N:number, openaiInstance?: Op
 
 // Example usage
 
-async function main(){
+async function main(){  
+  
   const prompt = "A futuristic cityscape with flying cars and neon lights";
   
   console.log("Prompt : "+prompt)
-  await generateImage(prompt);
+  // await generateImage(prompt,1);
+
+
+
 }
 
 // main()
