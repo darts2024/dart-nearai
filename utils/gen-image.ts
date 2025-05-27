@@ -54,18 +54,28 @@ export async function generateImage(
 
     let result = await Bluebird.map(
       promises,
-      async (p) => {
+      async (p:Promise<Boolean>) => {
         // console.log(p)
         return await p
       },
       {
-        concurrency: 20,
+        concurrency: promises.length,
       }
     )
 
     console.log("Generated images:", result)
 
-    return result.every((r) => r === true)
+
+    const noOfFailures = result.filter(res => res === false).length;
+
+    if (noOfFailures > 0) {
+      console.log("Failures>0")
+      return generateImage(prompt, noOfFailures, seed + N+noOfFailures)
+    }
+
+
+    return true
+    // return result.every((r) => r === true)
   }
 
   console.log(`prompt=${prompt}; N=${N}; seed=${seed}`)

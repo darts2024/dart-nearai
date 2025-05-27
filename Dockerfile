@@ -3,7 +3,7 @@ WORKDIR /app
 
 # COPY package*.json pnpm-lock.yaml ./
 
-COPY . .
+COPY package.json bun.lock
 
 # COPY .env.example .env
 
@@ -23,7 +23,9 @@ RUN mkdir -p /outputs
 
 WORKDIR /app
 
-COPY --from=builder /app .
+COPY --from=builder /app/node_modules ./node_modules
+
+COPY . .
 
 # RUN bun run build
 # CMD ["sh", "-c", "npm run test && npm run test:e2e"]
