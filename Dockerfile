@@ -1,19 +1,17 @@
-FROM node:23 AS builder
+FROM  oven/bun AS builder
 WORKDIR /app
 
-#COPY package*.json pnpm-lock.yaml ./
+# COPY package*.json pnpm-lock.yaml ./
 
 COPY . .
 
 # COPY .env.example .env
 
-
-RUN npm install -g bun
 RUN bun install
 
 
 # Deploy stage
-FROM node:23-alpine
+FROM oven/bun
 
 ENV NODE_ENV="production"
 ENV OUTPUT_DIR="/outputs/"
@@ -25,9 +23,7 @@ RUN mkdir -p /outputs
 
 WORKDIR /app
 
-RUN npm install -g bun # the other bun not visible here
-
-COPY --from=builder /app ./
+COPY --from=builder /app .
 
 # RUN bun run build
 # CMD ["sh", "-c", "npm run test && npm run test:e2e"]

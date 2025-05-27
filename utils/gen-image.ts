@@ -87,7 +87,7 @@ export async function generateImage(
 
     // console.log("Generated Image URL:", response.data[0].url);
   } catch (error) {
-    console.error("Error generating image:", error)
+    console.error(`Error generating image - ${seed}`, error)
   }
 }
 
