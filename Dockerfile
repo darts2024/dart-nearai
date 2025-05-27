@@ -1,11 +1,8 @@
 FROM  oven/bun AS builder
 WORKDIR /app
 
-# COPY package*.json pnpm-lock.yaml ./
 
-COPY package.json bun.lock
-
-# COPY .env.example .env
+COPY package.json bun.lock ./
 
 RUN bun install
 
@@ -23,10 +20,10 @@ RUN mkdir -p /outputs
 
 WORKDIR /app
 
-COPY --from=builder /app/node_modules ./node_modules
 
 COPY . .
 
+COPY --from=builder /app/node_modules ./node_modules
 # RUN bun run build
 # CMD ["sh", "-c", "npm run test && npm run test:e2e"]
 
