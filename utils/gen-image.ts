@@ -44,26 +44,28 @@ export async function generateImage(
   prompt: string,
   N: number,
   seed: number
-): Promise<void> {
+): Promise<Boolean> {
   if (N > 1) {
-    let promises: Array<Promise<void>> = []
+    let promises: Array<Promise<Boolean>> = []
 
     for (let i = 0; i < N; i++) {
       promises.push(generateImage(prompt, 1, seed + i))
     }
 
-    await Bluebird.map(
+    let result = await Bluebird.map(
       promises,
       async (p) => {
         // console.log(p)
-        await p
+        return await p
       },
       {
-        concurrency: promises.length,
+        concurrency: 20,
       }
     )
 
-    return
+    console.log("Generated images:", result)
+
+    return result.every((r) => r === true)
   }
 
   console.log(`prompt=${prompt}; N=${N}; seed=${seed}`)
@@ -88,7 +90,11 @@ export async function generateImage(
     // console.log("Generated Image URL:", response.data[0].url);
   } catch (error) {
     console.error(`Error generating image - ${seed}`, error)
+
+    return false
   }
+
+  return true
 }
 
 export async function editImage(
@@ -125,4 +131,4 @@ async function main() {
   )
 }
 
-main()
+// main()

@@ -28,12 +28,9 @@ program
   .action(async ({prompt, number,seed}) => {
     try {
       console.log(`🎨 Generating ${number} image with prompt:`, prompt);
-      const filePath = await generateImage(prompt,number,seed);
-      if (filePath) {
-        console.log('✨ Image generated successfully at:', filePath);
-      }
+      await generateImage(prompt,number,seed);
     } catch (error) {
-      console.error('❌ Error:', error.message);
+      console.error('❌ Error:', error);
     }
   });
 
