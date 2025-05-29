@@ -4,6 +4,7 @@ import { open } from "fs"
 import { openai } from "@config/openai.ts"
 import { env } from "./env.ts"
 import Bluebird from "bluebird"
+import { getRandomInt } from "./random.ts"
 
 export const handleImageResponse = async (
   response: any,
@@ -26,7 +27,7 @@ export const handleImageResponse = async (
 
       if (!image?.b64_json) continue
 
-      const filename = `${safePromptBase}_${i + 1}_${seed}.png`
+      const filename = `${safePromptBase}_${i + 1}_${seed}.jpg`
       const filePath = path.join(outputDir, filename)
 
       await saveImageToFile(image.b64_json, filePath)
@@ -49,7 +50,15 @@ export async function generateImage(
     let promises: Array<Promise<Boolean>> = []
 
     for (let i = 0; i < N; i++) {
-      promises.push(generateImage(prompt, 1, seed + i))
+      let seedI:number
+
+      // seedI = getRandomInt(-i, seed);
+
+      // seed = i
+      seedI = seed + i * N + seed % 1000 // Ensure different seeds for each image
+
+      // seed = i
+      promises.push(generateImage(prompt, 1, seedI))
     }
 
     let result = await Bluebird.map(
@@ -88,12 +97,14 @@ export async function generateImage(
         "fireworks::accounts/fireworks/models/playground-v2-5-1024px-aesthetic",
       // model: "fireworks::accounts/yi-01-ai/models/yi-large"
 
+      seed: seed, // Random seed for reproducibility
+
       // model: "fireworks::accounts/fireworks/models/playground-v2-5-1024px-aesthetic"
       // n: N, //Doesn't work
       // size: "1024x1024", // Image resolution (can be 256x256, 512x512, or 1024x1024)
     })
 
-    console.log(response)
+    // console.log(response)
 
     await handleImageResponse(response, prompt, seed)
 

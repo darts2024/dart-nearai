@@ -24,7 +24,8 @@ program
   .option('-p, --prompt <string>', 'Prompt to generate image', IMAGE_PROMPT )
   .option('-s, --size <size>', 'Image size (256x256, 512x512, or 1024x1024)', '1024x1024')
   .option('-n, --number <number>', 'Number of images to generate',  env("NUM_IMAGES",'1'))
-  .option('--seed <number>', 'Random Seed',  env("RANDOM_SEED",`${getRandomInt(1, 1e6)}`))
+  // .option('-r, --random <boolean>', 'Number of images to generate',  env("RANDOM_IMAGES",false))
+  .option('--seed <number>', 'Random Seed',  env("RANDOM_SEED",`1`))
   .action(async ({prompt, number,seed}) => {
     try {
       console.log(`🎨 Generating ${number} image with prompt:`, prompt);

@@ -32,5 +32,7 @@ ghcr VERSION="v1.6.0":
   just docker ghcr.io/darts2024/nearai:{{VERSION}}
 
 
-gen prompt number:
-  time bun start generate -n {{number}} -p {{prompt}};
+gen prompt="A serene landscape at sunrise" number="4":
+  # rm -rf data/*
+
+  time bun generate -n "{{number}}" -p "{{prompt}}"
