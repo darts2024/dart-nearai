@@ -18,3 +18,34 @@ export async function saveImageToFile(base64Image: string,filepath:string) {
     throw error;
   }
 }
+
+export async function getImageBase64(imagePath: string): Promise<string> {
+  const resolvedPath = path.resolve(imagePath);
+  const imageBuffer = await fs.promises.readFile(resolvedPath);
+  
+  const mimeType = getMimeType(resolvedPath);
+
+  // return imageBuffer.toString('base64')
+  return `data:${mimeType};base64,${imageBuffer.toString('base64')}`;
+
+}
+
+
+function getMimeType(filePath: string): string {
+  const ext = path.extname(filePath).toLowerCase();
+  switch (ext) {
+    case '.jpg':
+    case '.jpeg':
+      return 'image/jpeg';
+    case '.png':
+      return 'image/png';
+    case '.gif':
+      return 'image/gif';
+    case '.webp':
+      return 'image/webp';
+    case '.svg':
+      return 'image/svg+xml';
+    default:
+      return 'application/octet-stream';
+  }
+}

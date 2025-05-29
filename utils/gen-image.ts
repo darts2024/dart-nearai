@@ -1,4 +1,4 @@
-import { saveImageToFile } from "./same-image.ts"
+import { getImageBase64, saveImageToFile } from "./same-image.ts"
 import path from "path"
 import { open } from "fs"
 import { openai } from "@config/openai.ts"
@@ -41,11 +41,17 @@ export const handleImageResponse = async (
   }
 }
 
-export async function generateImage(
-  prompt: string,
-  N: number,
-  seed: number
-): Promise<Boolean> {
+
+interface DTOImageGenerate{
+  prompt: string;
+  N: number;
+  seed: number;
+  size?:string; // Image resolution (can be 256x256, 512x512, or 1024x1024)
+}
+
+export async function generateImage(dto: DTOImageGenerate): Promise<Boolean> {
+  let { prompt, N, seed, size } = dto
+  
   if (N > 1) {
     let promises: Array<Promise<Boolean>> = []
 
@@ -58,7 +64,12 @@ export async function generateImage(
       seedI = seed + i * N + seed % 1000 // Ensure different seeds for each image
 
       // seed = i
-      promises.push(generateImage(prompt, 1, seedI))
+      promises.push(generateImage({
+        prompt,
+        N: 1,
+        seed: seedI,
+        size: size
+      }))
     }
 
     let result = await Bluebird.map(
@@ -79,7 +90,7 @@ export async function generateImage(
 
     if (noOfFailures > 0) {
       console.log("Failures>0")
-      return generateImage(prompt, noOfFailures, seed + N+noOfFailures)
+      return generateImage({prompt,N: noOfFailures,seed:seed + N+noOfFailures})
     }
 
 
@@ -91,18 +102,18 @@ export async function generateImage(
 
   try {
     const response = await openai.images.generate({
-      prompt, // The text prompt for image generation
-      // model: "playground-v2-1024px-aesthetic",
+      prompt, 
       model:
         "fireworks::accounts/fireworks/models/playground-v2-5-1024px-aesthetic",
-      // model: "fireworks::accounts/yi-01-ai/models/yi-large"
-
-      seed: seed, // Random seed for reproducibility
-
-      // model: "fireworks::accounts/fireworks/models/playground-v2-5-1024px-aesthetic"
-      // n: N, //Doesn't work
-      // size: "1024x1024", // Image resolution (can be 256x256, 512x512, or 1024x1024)
-    })
+        
+        // controlImage: await getImageBase64("./utils/A_futuristic_cityscape_with_flying_cars_and_neon_lights.png"), // Control image path
+        // n: N, //Doesn't work
+        
+        
+        // @ts-ignore
+        seed, // Random seed for reproducibility
+        size ,
+      })
 
     // console.log(response)
 

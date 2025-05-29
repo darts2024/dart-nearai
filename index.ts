@@ -29,7 +29,7 @@ program
   .action(async ({prompt, number,seed}) => {
     try {
       console.log(`🎨 Generating ${number} image with prompt:`, prompt);
-      await generateImage(prompt,number,seed);
+      await generateImage({prompt,N:number,seed});
     } catch (error) {
       console.error('❌ Error:', error);
     }
