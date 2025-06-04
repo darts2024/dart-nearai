@@ -12,7 +12,7 @@ FROM oven/bun
 
 ENV NODE_ENV="production"
 ENV OUTPUT_DIR="/outputs/"
-ENV PROMPT='minimalistic polygon geometric car in brutalism warehouse'
+ENV Prompt='minimalistic polygon geometric car in brutalism warehouse'
 ENV RANDOM_SEED=40
 
 

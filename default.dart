@@ -14,9 +14,9 @@
                 "Entrypoint": [
                     "bun", "start", "{{(or .Cmd "generate")}}"
                 ],
-                "Image": "ghcr.io/darts2024/nearai:{{ or .dockerTag "v0.3.2"}}",
+                "Image": "ghcr.io/darts2024/nearai:{{ or .dockerTag "v0.3.3"}}",
                 "EnvironmentVariables": [
-                    {{if .Prompt}}"{{ subt "PROMPT=%s" .Prompt }}"{{else}}"PROMPT=A whimsical forest creature with oversized ears and a mischievous grin, surrounded by glowing fireflies"{{end}},
+                    {{if .Prompt}}"{{ subt "Prompt=%s" .Prompt }}"{{else}}"Prompt=A whimsical forest creature with oversized ears and a mischievous grin, surrounded by glowing fireflies"{{end}},
                     "OUTPUT_DIR=/outputs/",
                     "{{ subt "NUM_IMAGES=%s" (or .N "1")  }}",
                     "{{ subt "RANDOM_SEED=%s" (or .Seed "1")  }}"
