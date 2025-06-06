@@ -36,3 +36,7 @@ gen prompt="A serene landscape at sunrise" number="4":
   # rm -rf data/*
 
   time bun generate -n "{{number}}" -p "{{prompt}}"
+
+
+models:
+  nearai registry list --category=model
