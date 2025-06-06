@@ -16,7 +16,7 @@
                 ],
                 "Image": "ghcr.io/darts2024/nearai:{{ or ._Hash "v0.3.3"}}",
                 "EnvironmentVariables": [
-                    "Prompt"={{.Prompt}},
+                    "Prompt={{.Prompt}}",
                     "OUTPUT_DIR=/outputs/",
                     "{{ subt "NUM_IMAGES=%s" (or .N "1")  }}",
                     "{{ subt "RANDOM_SEED=%s" (or .Seed "1")  }}"
