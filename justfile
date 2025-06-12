@@ -4,6 +4,8 @@ set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 set positional-arguments
 set dotenv-filename := ".env"
 
+import "local.Justfile"
+
 b jobFile="job.json":
   #!/bin/bash
   rm -rf exitCode stderr stdout

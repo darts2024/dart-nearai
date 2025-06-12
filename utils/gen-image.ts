@@ -47,10 +47,12 @@ interface DTOImageGenerate{
   N: number;
   seed: number;
   size?:string; // Image resolution (can be 256x256, 512x512, or 1024x1024)
+
+  model: string;
 }
 
 export async function generateImage(dto: DTOImageGenerate): Promise<Boolean> {
-  let { prompt, N, seed, size } = dto
+  let { prompt, N, seed, size,model } = dto
   
   if (N > 1) {
     let promises: Array<Promise<Boolean>> = []
@@ -68,7 +70,8 @@ export async function generateImage(dto: DTOImageGenerate): Promise<Boolean> {
         prompt,
         N: 1,
         seed: seedI,
-        size: size
+        size: size,
+        model,
       }))
     }
 
@@ -90,7 +93,7 @@ export async function generateImage(dto: DTOImageGenerate): Promise<Boolean> {
 
     if (noOfFailures > 0) {
       console.log("Failures>0")
-      return generateImage({prompt,N: noOfFailures,seed:seed + N+noOfFailures})
+      return generateImage({prompt,N: noOfFailures,seed:seed + N+noOfFailures,model})
     }
 
 
@@ -104,8 +107,7 @@ export async function generateImage(dto: DTOImageGenerate): Promise<Boolean> {
     const response = await openai.images.generate({
       prompt, 
       model:
-        "fireworks::accounts/fireworks/models/playground-v2-5-1024px-aesthetic",
-        
+        model,
         // controlImage: await getImageBase64("./utils/A_futuristic_cityscape_with_flying_cars_and_neon_lights.png"), // Control image path
         // n: N, //Doesn't work
         

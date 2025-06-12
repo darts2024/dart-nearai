@@ -1,12 +1,10 @@
 import { Command } from "commander"
 import { generateImage } from "@utils/gen-image.ts"
 
+import {IMAGE_MODEL, IMAGE_PROMPT} from "@config/index.ts"
+
 const program = new Command()
 
-const IMAGE_PROMPT = env(
-  "Prompt",
-  "A pair of clear hands looking through a transparent glass Christmas ball,hyper-realistic, minimalist, futuristic background with cute Christmas decorations like Santa Claus, a snowman, and snowflakes, 8k"
-)
 
 import { config } from "dotenv"
 import { env } from "@utils/env.ts"
@@ -34,12 +32,13 @@ program
     "Number of images to generate",
     env("NUM_IMAGES", "1")
   )
+  .option("-m, --model <string>", "Model used to generate image", IMAGE_MODEL)
   // .option('-r, --random <boolean>', 'Number of images to generate',  env("RANDOM_IMAGES",false))
   .option("--seed <number>", "Random Seed", env("RANDOM_SEED", `1`))
-  .action(async ({ prompt, number, seed }) => {
+  .action(async ({ prompt, number, seed, model }) => {
     try {
-      console.log(`🎨 Generating ${number} image with prompt:`, prompt)
-      await generateImage({ prompt, N: number, seed })
+      console.log(`🎨 Generating ${number} image with prompt: ${prompt} on model:${model}`)
+      await generateImage({ prompt, N: number, seed,model })
     } catch (error) {
       console.error("❌ Error:", error)
     }

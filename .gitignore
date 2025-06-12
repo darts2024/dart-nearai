@@ -24,3 +24,5 @@ notepad.sh
 
 
 rest.http
+
+local.Justfile
