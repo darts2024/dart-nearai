@@ -1,7 +1,7 @@
 import { Command } from "commander"
 import { generateImage } from "@utils/gen-image.ts"
 
-import {IMAGE_MODEL, IMAGE_PROMPT} from "@config/index.ts"
+import {IMAGE_MODEL, IMAGE_PROMPT, MODEL} from "@config/index.ts"
 
 const program = new Command()
 
@@ -46,14 +46,18 @@ program
 
 const DEFAULT_PROMPT = "Tell me a funny programmer joke."
 
+
+
+
+
 program
   .command("joke")
   .description("Generate a joke using a witty AI model")
   .option("-p, --prompt <string>", "Prompt to generate a joke", DEFAULT_PROMPT)
   .option(
     "-m, --model <string>",
-    "Model ID to use",
-    "fireworks::accounts/fireworks/models/mixtral-8x22b-instruct"
+    "Model to use",
+    MODEL,
   )
   .action(async ({ prompt, model }) => {
     try {
