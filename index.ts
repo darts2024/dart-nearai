@@ -1,14 +1,13 @@
 import { Command } from "commander"
 import { generateImage } from "@utils/gen-image.ts"
 
-import {IMAGE_MODEL, IMAGE_PROMPT, MODEL} from "@config/index.ts"
+import { IMAGE_MODEL, IMAGE_PROMPT, SMART_MODEl } from "@config/index.ts"
 
 const program = new Command()
 
-
 import { config } from "dotenv"
 import { env } from "@utils/env.ts"
-import { genJoke } from "@utils/gen-text.ts"
+import { genJoke, genSmartPrompt } from "@utils/gen-text.ts"
 import { getRandomInt } from "@utils/random.ts"
 
 config()
@@ -37,33 +36,42 @@ program
   .option("--seed <number>", "Random Seed", env("RANDOM_SEED", `1`))
   .action(async ({ prompt, number, seed, model }) => {
     try {
-      console.log(`🎨 Generating ${number} image with prompt: ${prompt} on model:${model}`)
-      await generateImage({ prompt, N: number, seed,model })
+      console.log(
+        `🎨 Generating ${number} image with prompt: ${prompt} on model:${model}`
+      )
+      await generateImage({ prompt, N: number, seed, model })
     } catch (error) {
       console.error("❌ Error:", error)
     }
   })
 
-const DEFAULT_PROMPT = "Tell me a funny programmer joke."
-
-
-
-
+const JOKE_PROMPT = "Tell me a funny programmer joke."
 
 program
   .command("joke")
   .description("Generate a joke using a witty AI model")
-  .option("-p, --prompt <string>", "Prompt to generate a joke", DEFAULT_PROMPT)
-  .option(
-    "-m, --model <string>",
-    "Model to use",
-    MODEL,
-  )
+  .option("-p, --prompt <string>", "Prompt to generate a joke", JOKE_PROMPT)
+  .option("-m, --model <string>", "Model to use", SMART_MODEl)
   .action(async ({ prompt, model }) => {
     try {
       console.log("🃏 Generating joke with prompt:", prompt)
       const joke = await genJoke(prompt, model)
       console.log("😂 Joke:", joke)
+    } catch (error: any) {
+      console.error("❌ Error:", error.message)
+    }
+  })
+
+program
+  .command("smartPrompt")
+  .description("Generate smart prompt for ai creations")
+  .option("-p, --prompt <string>", "Prompt", IMAGE_PROMPT)
+  .option("-m, --model <string>", "Model", SMART_MODEl)
+  .action(async ({ prompt, model }) => {
+    try {
+      console.log("🃏 Generating smart prompt for prompt:", prompt)
+      const smartPrompt = await genSmartPrompt({prompt, model})
+      console.log("Smart Prompt:", smartPrompt)
     } catch (error: any) {
       console.error("❌ Error:", error.message)
     }

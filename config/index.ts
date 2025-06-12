@@ -9,3 +9,4 @@ export const IMAGE_PROMPT = env(
 export const IMAGE_MODEL = env("IMAGE_MODEL", "fireworks::accounts/fireworks/models/playground-v2-5-1024px-aesthetic")
 
 export const MODEL = env("MODEL", "fireworks::accounts/fireworks/models/mixtral-8x22b-instruct")
+export const SMART_MODEl = env("MODEL", "fireworks::accounts/fireworks/models/mixtral-8x22b-instruct")
