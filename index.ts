@@ -1,5 +1,5 @@
 import { Command } from "commander"
-import { generateImage } from "@utils/gen-image.ts"
+import { generateImage, type DTOImageGenerate } from "@utils/gen-image.ts"
 
 import { IMAGE_MODEL, IMAGE_PROMPT, SMART_MODEl } from "@config/index.ts"
 
@@ -27,19 +27,21 @@ program
     "1024x1024"
   )
   .option(
-    "-n, --number <number>",
+    "-N, --number <number>",
     "Number of images to generate",
     env("NUM_IMAGES", "1")
   )
   .option("-m, --model <string>", "Model used to generate image", IMAGE_MODEL)
   // .option('-r, --random <boolean>', 'Number of images to generate',  env("RANDOM_IMAGES",false))
   .option("--seed <number>", "Random Seed", env("RANDOM_SEED", `1`))
-  .action(async ({ prompt, number, seed, model }) => {
+  .option("--steps <number>", "No of steps", process.env.STEPS)
+  .action(async (dto:DTOImageGenerate) => {
+    // const { prompt, number, seed, model } = dto
     try {
       console.log(
-        `🎨 Generating ${number} image with prompt: ${prompt} on model:${model}`
+        `🎨 Generating with followiing configuration \n${JSON.stringify(dto, null, 2)}`
       )
-      await generateImage({ prompt, N: number, seed, model })
+      await generateImage(dto)
     } catch (error) {
       console.error("❌ Error:", error)
     }

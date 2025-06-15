@@ -42,17 +42,18 @@ export const handleImageResponse = async (
 }
 
 
-interface DTOImageGenerate{
+export interface DTOImageGenerate{
   prompt: string;
   N: number;
   seed: number;
   size?:string; // Image resolution (can be 256x256, 512x512, or 1024x1024)
 
   model: string;
+  steps?:number;
 }
 
 export async function generateImage(dto: DTOImageGenerate): Promise<Boolean> {
-  let { prompt, N, seed, size,model } = dto
+  let { prompt, N, seed, size,model ,steps} = dto
   
   if (N > 1) {
     let promises: Array<Promise<Boolean>> = []
@@ -93,7 +94,7 @@ export async function generateImage(dto: DTOImageGenerate): Promise<Boolean> {
 
     if (noOfFailures > 0) {
       console.log("Failures>0")
-      return generateImage({prompt,N: noOfFailures,seed:seed + N+noOfFailures,model})
+      return generateImage({prompt,N: noOfFailures,seed:seed + N+noOfFailures,model, steps})
     }
 
 
@@ -115,7 +116,7 @@ export async function generateImage(dto: DTOImageGenerate): Promise<Boolean> {
         // @ts-ignore
         seed, // Random seed for reproducibility
         size ,
-        // steps:100,
+        steps,
       })
 
     // console.log(response)
