@@ -115,6 +115,7 @@ export async function generateImage(dto: DTOImageGenerate): Promise<Boolean> {
         // @ts-ignore
         seed, // Random seed for reproducibility
         size ,
+        // steps:100,
       })
 
     // console.log(response)
