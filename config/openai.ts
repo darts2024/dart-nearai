@@ -16,7 +16,7 @@ export const initializeOpenAI = (auth: any) => {
   let baseUrl = "https://api.near.ai/v1";
   return new OpenAI({
     baseURL: baseUrl,
-    apiKey:  `Bearer ${JSON.stringify(auth)}`,
+    apiKey:  `${JSON.stringify(auth)}`,
   });
 };
 
