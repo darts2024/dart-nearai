@@ -1,4 +1,4 @@
-FROM  oven/bun AS builder
+FROM  oven/bun:alpine AS builder
 WORKDIR /app
 
 
@@ -8,11 +8,12 @@ COPY . .
 
 RUN bun install
 
+# BUN: so if u compile for alpine-> it will only work in alpine
 RUN bun build --compile --minify ./index.ts --outfile nearai
 
 
 # Deploy stage
-FROM alpine
+FROM node:alpine
 
 ENV NODE_ENV="production"
 ENV OUTPUT_DIR="/outputs/"
