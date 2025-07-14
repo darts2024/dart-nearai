@@ -4,11 +4,15 @@ WORKDIR /app
 
 COPY package.json bun.lock ./
 
+COPY . .
+
 RUN bun install
+
+RUN bun build --compile --minify ./index.ts --outfile nearai
 
 
 # Deploy stage
-FROM oven/bun
+FROM alpine
 
 ENV NODE_ENV="production"
 ENV OUTPUT_DIR="/outputs/"
@@ -20,14 +24,11 @@ RUN mkdir -p /outputs
 
 WORKDIR /app
 
+COPY --from=builder /app/nearai .
 
-COPY . .
+RUN chmod +x ./nearai
 
-COPY --from=builder /app/node_modules ./node_modules
-# RUN bun run build
-# CMD ["sh", "-c", "npm run test && npm run test:e2e"]
-
-ENTRYPOINT ["bun", "start"]
+ENTRYPOINT ["./nearai"]
 
 CMD [ "generate" ]
 
